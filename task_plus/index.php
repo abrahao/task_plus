@@ -8,9 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $task = test_input($_POST["task"]);
         // check if task only contains letters and whitespace
-        if (!preg_match("/^[a-zA-Z-' ]*$/", $task)) {
-            $taskErr = "Only letters and white space allowed";
-        }
+
     }
 }
 
@@ -66,7 +64,6 @@ function test_input($data)
             }
         }
         ?>
-
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <div class="form-group p-5 text-center bg-light">
                 Task <input type="text" name="task" value="<?php
@@ -83,7 +80,7 @@ function test_input($data)
     </div>
     <hr>
     <div class="jumbotron">
-        <h3>Tasks</h3>
+        <!-- <h3>Tasks</h3> -->
         <table class="table table-hover table-dark">
             <thead>
                 <tr>
@@ -99,12 +96,22 @@ function test_input($data)
                 $sql = 'SELECT * FROM tasks ORDER BY id';
                 foreach ($conn->query($sql) as $row) {
                     // print $row['task'] . "\t";
-
                 ?>
+
+                    <?php
+                    $date = $row['data_cad'];
+
+                    // Create the timestamp from the given date
+                    $timestamp = strtotime($date);
+
+                    // Create the new format from the timestamp
+                    $date = date("d/m/Y", $timestamp);
+                    ?>
+
                     <tr>
                         <td><?= $row['id'] ?></td>
                         <td><?= $row['task'] ?></td>
-                        <td>00:00:00</td>
+                        <td><?= $date ?></td>
                         <td>
                             <button type="button" class="btn btn-success">Resolvido</button>
                             <button type="button" class="btn btn-danger">Excluir</button>
